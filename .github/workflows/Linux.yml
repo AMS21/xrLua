@@ -43,10 +43,15 @@ jobs:
           submodules: recursive
 
       - name: Install clang
-        uses: KyleMayes/install-llvm-action@v1
-        with:
-          version: "${{ matrix.compiler_version }}"
-          env: true
+        run: |
+          wget https://apt.llvm.org/llvm.sh
+          chmod +x llvm.sh
+          sudo ./llvm.sh ${{ matrix.compiler_version }}
+          rm -rf llvm.sh
+          sudo apt install clang-${{ matrix.compiler_version }}
+
+          echo "CC=clang-${{ matrix.compiler_version }}" >> "$GITHUB_ENV"
+          echo "CXX=clang++-${{ matrix.compiler_version }}" >> "$GITHUB_ENV"
 
       - name: Configure build directory
         run: cmake -B ./build -S ./ -DCMAKE_BUILD_TYPE:STRING=${{ matrix.build_type }}
