@@ -71,8 +71,6 @@ jobs:
 
       matrix:
         compiler_version:
-          - "7"
-          - "8"
           - "9"
           - "10"
           - "11"
