@@ -1,0 +1,52 @@
+name: CodeCoverage
+
+on:
+  push:
+    branches-ignore:
+      - 'dependabot/**'
+  pull_request:
+      branches-ignore:
+      - 'dependabot/**'
+  workflow_dispatch:
+
+jobs:
+  linux:
+    runs-on: 'ubuntu-22.04'
+
+    strategy:
+      fail-fast: false
+
+    env:
+      compiler: "gcc-13"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install compiler
+        run: sudo apt-get install gcc-${{ env.compiler }} g++-${{ env.compiler }} gcovr
+
+      - name: Configure build directory
+        run: cmake -B ./build -S ./ -DCMAKE_BUILD_TYPE:STRING=Debug
+
+      - name: Build
+        working-directory: ./build
+        run: cmake --build . --config Debug
+
+      - name: Run tests
+        working-directory: ./build
+        run: ctest . -C Debug
+
+      - name: Process coverage data
+        working-directory: ./build
+        run: gcovr -j $(nproc) --delete --root ../ --print-summary --exclude-unreachable-branches --exclude-function-lines --xml-pretty --xml coverage.xml . --gcov-executable "gcov-${{ env.compiler }}" --exclude-lines-by-pattern "^\s*{$" --exclude-lines-by-pattern "^\s*}$"
+
+      - name: Upload coverage data
+        uses: codecov/codecov-action@v3.1.4
+        with:
+          file: ./build/coverage.xml
+          flags: ${{ runner.os }},${{ env.compiler }}
+          name: ${{ runner.os }}-${{ env.compiler }}
+          fail_ci_if_error: true

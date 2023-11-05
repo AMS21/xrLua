@@ -1,0 +1,99 @@
+name: Linux
+
+on:
+  push:
+    branches-ignore:
+      - 'dependabot/**'
+  pull_request:
+    branches-ignore:
+      - 'dependabot/**'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  clang:
+    runs-on: 'ubuntu-latest'
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        compiler_version:
+          - "9"
+          - "10"
+          - "11"
+          - "12"
+          - "13"
+          - "14"
+          - "15"
+          - "16"
+          - "17"
+
+        build_type:
+          - "Debug"
+          - "Release"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install clang
+        uses: KyleMayes/install-llvm-action@v1
+        with:
+          version: "${{ matrix.compiler_version }}"
+
+      - name: Configure build directory
+        run: CC=clang-${{ matrix.compiler_version }} CXX=clang++-${{ matrix.compiler_version }} cmake -B ./build -S ./ -DCMAKE_BUILD_TYPE:STRING=${{ matrix.build_type }}
+
+      - name: Build
+        working-directory: ./build
+        run: cmake --build . --config ${{ matrix.build_type }}
+
+      - name: Run tests
+        working-directory: ./build
+        run: ctest . -C ${{ matrix.build_type }}
+
+  gcc:
+    runs-on: ${{ matrix.cfg.os }}
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        # Pair of os version and gcc version
+        cfg:
+          - { os: ubuntu-20.04, compiler_version: "8" }
+          - { os: ubuntu-20.04, compiler_version: "9" }
+          - { os: ubuntu-20.04, compiler_version: "10" }
+          - { os: ubuntu-20.04, compiler_version: "11" }
+          - { os: ubuntu-22.04, compiler_version: "12" }
+          - { os: ubuntu-22.04, compiler_version: "13" }
+
+        build_type:
+          - "Debug"
+          - "Release"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install compiler
+        run: sudo apt-get install gcc-${{ matrix.cfg.compiler_version }} g++-${{ matrix.cfg.compiler_version }}
+
+      - name: Configure build directory
+        run: CC=gcc-${{ matrix.cfg.compiler_version }} CXX=g++-${{ matrix.cfg.compiler_version }} cmake -B ./build -S ./ -DCMAKE_BUILD_TYPE:STRING=${{ matrix.build_type }}
+
+      - name: Build
+        working-directory: ./build
+        run: cmake --build . --config ${{ matrix.build_type }}
+
+      - name: Run tests
+        working-directory: ./build
+        run: ctest . -C ${{ matrix.build_type }}
