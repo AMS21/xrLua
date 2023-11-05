@@ -67,6 +67,17 @@ jobs:
       fail-fast: false
 
       matrix:
+        compiler_version:
+          - "9"
+          - "10"
+          - "11"
+          - "12"
+          - "13"
+          - "14"
+          - "15"
+          - "16"
+          - "17"
+
         build_type:
           - "Debug"
           - "Release"
@@ -77,20 +88,11 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Install compiler
-        shell: powershell
-        run: |
-          # Install scoop
-          iwr -useb get.scoop.sh -outfile 'install.ps1'
-          # Required since CI runner is admin
-          # See https://github.com/ScoopInstaller/Install#for-admin
-          .\install.ps1 -RunAsAdmin
-
-          scoop install ninja llvm --global
-
-          echo "CXX=clang++" >> $GITHUB_ENV
-          echo "C:\ProgramData\scoop\apps\llvm\current\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-          echo "C:\ProgramData\scoop\apps\ninja\current"    | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+      - name: Install clang
+        uses: KyleMayes/install-llvm-action@v1
+        with:
+          version: "${{ matrix.compiler_version }}"
+          env: true
 
       - name: Configure build directory
         run: cmake -B ./build -S ./ -DCMAKE_BUILD_TYPE:STRING=${{ matrix.build_type }}

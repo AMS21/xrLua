@@ -46,9 +46,10 @@ jobs:
         uses: KyleMayes/install-llvm-action@v1
         with:
           version: "${{ matrix.compiler_version }}"
+          env: true
 
       - name: Configure build directory
-        run: CC=clang-${{ matrix.compiler_version }} CXX=clang++-${{ matrix.compiler_version }} cmake -B ./build -S ./ -DCMAKE_BUILD_TYPE:STRING=${{ matrix.build_type }}
+        run: cmake -B ./build -S ./ -DCMAKE_BUILD_TYPE:STRING=${{ matrix.build_type }}
 
       - name: Build
         working-directory: ./build

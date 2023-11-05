@@ -47,6 +47,6 @@ jobs:
         uses: codecov/codecov-action@v3.1.4
         with:
           file: ./build/coverage.xml
-          flags: ${{ runner.os }},${{ env.compiler_version }}
-          name: ${{ runner.os }}-${{ env.compiler_version }}
           fail_ci_if_error: true
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
