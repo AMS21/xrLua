@@ -17,7 +17,7 @@ jobs:
       fail-fast: false
 
     env:
-      compiler: "gcc-13"
+      compiler_version: "13"
 
     steps:
       - name: Checkout
@@ -26,7 +26,7 @@ jobs:
           submodules: recursive
 
       - name: Install compiler
-        run: sudo apt-get install gcc-${{ env.compiler }} g++-${{ env.compiler }} gcovr
+        run: sudo apt-get install gcc-${{ env.compiler_version }} g++-${{ env.compiler_version }} gcovr
 
       - name: Configure build directory
         run: cmake -B ./build -S ./ -DCMAKE_BUILD_TYPE:STRING=Debug
@@ -41,12 +41,12 @@ jobs:
 
       - name: Process coverage data
         working-directory: ./build
-        run: gcovr -j $(nproc) --delete --root ../ --print-summary --exclude-unreachable-branches --exclude-function-lines --xml-pretty --xml coverage.xml . --gcov-executable "gcov-${{ env.compiler }}" --exclude-lines-by-pattern "^\s*{$" --exclude-lines-by-pattern "^\s*}$"
+        run: gcovr -j $(nproc) --delete --root ../ --print-summary --exclude-unreachable-branches --exclude-function-lines --xml-pretty --xml coverage.xml . --gcov-executable "gcov-${{ env.compiler_version }}" --exclude-lines-by-pattern "^\s*{$" --exclude-lines-by-pattern "^\s*}$"
 
       - name: Upload coverage data
         uses: codecov/codecov-action@v3.1.4
         with:
           file: ./build/coverage.xml
-          flags: ${{ runner.os }},${{ env.compiler }}
-          name: ${{ runner.os }}-${{ env.compiler }}
+          flags: ${{ runner.os }},${{ env.compiler_version }}
+          name: ${{ runner.os }}-${{ env.compiler_version }}
           fail_ci_if_error: true
