@@ -126,7 +126,6 @@ if(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
   set(XRLUA_DEBUG_FLAGS -fcheck-new -fvar-tracking -fvar-tracking-assignments
                         -grecord-gcc-switches)
   set(XRLUA_OPT_FLAGS
-      -fallow-store-data-races
       -fdeclone-ctor-dtor
       -fdevirtualize-speculatively
       -fgcse-las
@@ -301,7 +300,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${XRLUA_FLAGS}")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${XRLUA_DEBUG_FLAGS}")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${XRLUA_OPT_FLAGS}")
 
-if (XRLUA_COVERAGE_BUILD)
+if(XRLUA_COVERAGE_BUILD)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${XRLUA_COVERAGE_FLAGS}")
 endif()
 
