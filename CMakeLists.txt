@@ -23,6 +23,7 @@ endif()
 
 # Options
 option(XRLUA_COVERAGE_BUILD "Enable coverage flags" OFF)
+option(XRLUA_BUILD_TESTS "Build tests" ${XRLUA_MAIN_PROJECT})
 
 # Settings
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -31,6 +32,9 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+# Load external dependencies
+add_subdirectory(external)
 
 include(CheckIPOSupported)
 check_ipo_supported(RESULT XRLUA_LTO_SUPPORTED)
@@ -259,13 +263,15 @@ elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
       -fprofile-instr-generate
       -ftest-coverage)
   if(XRLUA_LTO_SUPPORTED)
-    set(XRLUA_OPT_FLAGS -flto=full -fwhole-program-vtables
-                        -fvirtual-function-elimination)
+    set(XRLUA_OPT_FLAGS -flto=full -fwhole-program-vtables)
   endif()
 
   # Clang-10 flags
   if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 10)
     set(XRLUA_FLAGS ${XRLUA_FLAGS} -Wno-c++20-compat -Wno-c++20-extensions)
+    if(XRLUA_LTO_SUPPORTED)
+      set(XRLUA_OPT_FLAGS ${XRLUA_OPT_FLAGS} -fvirtual-function-elimination)
+    endif()
   endif()
 
   # Clang-12 flags
@@ -306,3 +312,12 @@ endif()
 
 # subdirectories
 add_subdirectory(src)
+
+if(XRLUA_BUILD_TESTS)
+  list(APPEND CMAKE_MODULE_PATH
+       "${CMAKE_CURRENT_SOURCE_DIR}/external/Catch2/extras")
+  include(CTest)
+  include(Catch)
+
+  add_subdirectory(tests)
+endif()
