@@ -75,7 +75,6 @@ if(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
       -Wmisleading-indentation
       -Wmissing-field-initializers
       -Wmissing-format-attribute
-      -Wmissing-include-dirs
       -Wmissing-noreturn
       -Wnoexcept
       -Wnon-virtual-dtor
@@ -154,6 +153,12 @@ if(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
   if(XRLUA_LTO_SUPPORTED)
     set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
     set(XRLUA_OPT_FLAGS -fdevirtualize-at-ltrans -fipa-pta -fwhole-program)
+  endif()
+
+  # MacOS seems to have problems for missing include directories which come from
+  # MacOS SDK itself so we only enable it on non MacOS platforms
+  if(NOT ${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+    set(phi_warning_flags ${phi_warning_flags} -Wmissing-include-dirs)
   endif()
 
   # GCC-8 flags
