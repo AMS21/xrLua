@@ -7,7 +7,7 @@ namespace xrlua::detail
 {
 
 [[noreturn]]
-void assertion_failure_handler(
+XRLUA_ATTR_COLD void assertion_failure_handler(
     const char* message, const char* condition, const char* file, int line_number, const char* function)
 {
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg)

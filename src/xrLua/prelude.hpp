@@ -72,6 +72,13 @@
 
 // Attributes
 
+// XRLUA_ATTR_COLD
+#if XRLUA_CLANG() || XRLUA_GCC()
+#    define XRLUA_ATTR_COLD __attribute__((cold))
+#else
+#    define XRLUA_ATTR_COLD
+#endif
+
 // XRLUA_ATTR_CONST
 #if XRLUA_CLANG() || XRLUA_GCC()
 #    define XRLUA_ATTR_CONST __attribute__((const))
@@ -107,18 +114,27 @@
 #    define XRLUA_ATTR_NONNULL
 #endif
 
+// XRLUA_LIKELY, XRLUA_UNLIKELY
+#if XRLUA_CLANG() || XRLUA_GCC()
+#    define XRLUA_LIKELY(condition) __builtin_expect(!!(condition), 1)
+#    define XRLUA_UNLIKELY(condition) __builtin_expect(!!(condition), 0)
+#else
+#    define XRLUA_LIKELY(condition) condition
+#    define XRLUA_UNLIKELY(condition) condition
+#endif
+
 // Assertions
 namespace xrlua::detail
 {
 
 [[noreturn]]
-void assertion_failure_handler(
+XRLUA_ATTR_COLD void assertion_failure_handler(
     const char* message, const char* condition, const char* file, int line_number, const char* function);
 
 } // namespace xrlua::detail
 
 #define XRLUA_ASSERT(condition, message)                                                                               \
-    if (!(condition))                                                                                                  \
+    if (XRLUA_UNLIKELY(!(condition)))                                                                                  \
     {                                                                                                                  \
         ::xrlua::detail::assertion_failure_handler(message, #condition, __FILE__, __LINE__, XRLUA_CURRENT_FUNCTION()); \
     }                                                                                                                  \
