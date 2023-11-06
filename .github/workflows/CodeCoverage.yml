@@ -43,7 +43,7 @@ jobs:
           sudo apt-get install gcc-${{ matrix.cfg.compiler_version }} g++-${{ matrix.cfg.compiler_version }}
 
           echo "CC=gcc-${{ matrix.cfg.compiler_version }}" >> "$GITHUB_ENV"
-          echo "CXX=g++++-${{ matrix.cfg.compiler_version }}" >> "$GITHUB_ENV"
+          echo "CXX=g++-${{ matrix.cfg.compiler_version }}" >> "$GITHUB_ENV"
 
       - name: Install gcovr
         run: sudo apt-get install gcovr
