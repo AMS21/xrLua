@@ -1,4 +1,4 @@
-[submodule "external/Catch2"]
-	path = external/Catch2
-	url = https://github.com/catchorg/Catch2.git
-	branch = devel
+[submodule "external/googletest"]
+	path = external/googletest
+	url = https://github.com/google/googletest.git
+	branch = main

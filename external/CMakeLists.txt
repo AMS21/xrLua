@@ -4,5 +4,5 @@ function(mark_target_as_system_include target)
     ${target} PROPERTIES INTERFACE_SYSTEM_INCLUDE_DIRECTORIES "${include_dir}")
 endfunction()
 
-add_subdirectory(Catch2 EXCLUDE_FROM_ALL)
-mark_target_as_system_include(Catch2)
+add_subdirectory(googletest EXCLUDE_FROM_ALL)
+mark_target_as_system_include(gtest)

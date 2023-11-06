@@ -73,7 +73,6 @@ if(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
       -Winvalid-pch
       -Wlogical-op
       -Wmisleading-indentation
-      -Wmissing-declarations
       -Wmissing-field-initializers
       -Wmissing-format-attribute
       -Wmissing-include-dirs
@@ -314,10 +313,8 @@ endif()
 add_subdirectory(src)
 
 if(XRLUA_BUILD_TESTS)
-  list(APPEND CMAKE_MODULE_PATH
-       "${CMAKE_CURRENT_SOURCE_DIR}/external/Catch2/extras")
   include(CTest)
-  include(Catch)
+  include(GoogleTest)
 
   add_subdirectory(tests)
 endif()

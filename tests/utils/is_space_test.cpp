@@ -1,41 +1,41 @@
-#include <catch2/catch_test_macros.hpp>
+#include <gtest/gtest.h>
 
 #include <xrLua/utils/is_space.hpp>
 
-TEST_CASE("utils::is_space")
+TEST(utils, is_space)
 {
-    REQUIRE(xrlua::is_space(' '));
-    REQUIRE(xrlua::is_space('\f'));
-    REQUIRE(xrlua::is_space('\n'));
-    REQUIRE(xrlua::is_space('\r'));
-    REQUIRE(xrlua::is_space('\t'));
-    REQUIRE(xrlua::is_space('\v'));
+    EXPECT_TRUE(xrlua::is_space(' '));
+    EXPECT_TRUE(xrlua::is_space('\f'));
+    EXPECT_TRUE(xrlua::is_space('\n'));
+    EXPECT_TRUE(xrlua::is_space('\r'));
+    EXPECT_TRUE(xrlua::is_space('\t'));
+    EXPECT_TRUE(xrlua::is_space('\v'));
 
-    REQUIRE_FALSE(xrlua::is_space('\0'));
-    REQUIRE_FALSE(xrlua::is_space('a'));
-    REQUIRE_FALSE(xrlua::is_space('z'));
-    REQUIRE_FALSE(xrlua::is_space('A'));
-    REQUIRE_FALSE(xrlua::is_space('Z'));
-    REQUIRE_FALSE(xrlua::is_space('0'));
-    REQUIRE_FALSE(xrlua::is_space('9'));
-    REQUIRE_FALSE(xrlua::is_space('!'));
-    REQUIRE_FALSE(xrlua::is_space('['));
-    REQUIRE_FALSE(xrlua::is_space(']'));
-    REQUIRE_FALSE(xrlua::is_space('{'));
-    REQUIRE_FALSE(xrlua::is_space('}'));
-    REQUIRE_FALSE(xrlua::is_space('('));
-    REQUIRE_FALSE(xrlua::is_space(')'));
-    REQUIRE_FALSE(xrlua::is_space(';'));
-    REQUIRE_FALSE(xrlua::is_space(':'));
-    REQUIRE_FALSE(xrlua::is_space(','));
-    REQUIRE_FALSE(xrlua::is_space('.'));
-    REQUIRE_FALSE(xrlua::is_space('/'));
-    REQUIRE_FALSE(xrlua::is_space('\\'));
-    REQUIRE_FALSE(xrlua::is_space('<'));
-    REQUIRE_FALSE(xrlua::is_space('>'));
-    REQUIRE_FALSE(xrlua::is_space('|'));
-    REQUIRE_FALSE(xrlua::is_space('?'));
-    REQUIRE_FALSE(xrlua::is_space('\''));
-    REQUIRE_FALSE(xrlua::is_space('"'));
-    REQUIRE_FALSE(xrlua::is_space('\b'));
+    EXPECT_FALSE(xrlua::is_space('\0'));
+    EXPECT_FALSE(xrlua::is_space('a'));
+    EXPECT_FALSE(xrlua::is_space('z'));
+    EXPECT_FALSE(xrlua::is_space('A'));
+    EXPECT_FALSE(xrlua::is_space('Z'));
+    EXPECT_FALSE(xrlua::is_space('0'));
+    EXPECT_FALSE(xrlua::is_space('9'));
+    EXPECT_FALSE(xrlua::is_space('!'));
+    EXPECT_FALSE(xrlua::is_space('['));
+    EXPECT_FALSE(xrlua::is_space(']'));
+    EXPECT_FALSE(xrlua::is_space('{'));
+    EXPECT_FALSE(xrlua::is_space('}'));
+    EXPECT_FALSE(xrlua::is_space('('));
+    EXPECT_FALSE(xrlua::is_space(')'));
+    EXPECT_FALSE(xrlua::is_space(';'));
+    EXPECT_FALSE(xrlua::is_space(':'));
+    EXPECT_FALSE(xrlua::is_space(','));
+    EXPECT_FALSE(xrlua::is_space('.'));
+    EXPECT_FALSE(xrlua::is_space('/'));
+    EXPECT_FALSE(xrlua::is_space('\\'));
+    EXPECT_FALSE(xrlua::is_space('<'));
+    EXPECT_FALSE(xrlua::is_space('>'));
+    EXPECT_FALSE(xrlua::is_space('|'));
+    EXPECT_FALSE(xrlua::is_space('?'));
+    EXPECT_FALSE(xrlua::is_space('\''));
+    EXPECT_FALSE(xrlua::is_space('"'));
+    EXPECT_FALSE(xrlua::is_space('\b'));
 }
