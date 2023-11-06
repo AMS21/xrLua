@@ -1,10 +1,23 @@
 #pragma once
 
-#include "xrlua/utils/assert.hpp"
+#include "xrLua/utils/assert.hpp"
 
 // Platform
 
 // TODO
+
+// MSVC compiler
+#if defined(_MSC_VER) && !defined(__clang__)
+#    define XRLUA_MSVC() 1
+#    define XRLUA_MSVC_MAJOR() (_MSC_FULL_VER / 10000000)
+#    define XRLUA_MSVC_MINOR() (_MSC_FULL_VER % 10000000 / 100000)
+#    define XRLUA_MSVC_PATCH() (_MSC_FULL_VER % 100000)
+#else
+#    define XRLUA_MSVC() 0
+#    define XRLUA_MSVC_MAJOR() 0
+#    define XRLUA_MSVC_MINOR() 0
+#    define XRLUA_MSVC_PATCH() 0
+#endif
 
 // Clang compiler
 #ifdef __clang__
@@ -30,19 +43,6 @@
 #    define XRLUA_GCC_MAJOR() 0
 #    define XRLUA_GCC_MINOR() 0
 #    define XRLUA_GCC_PATCH() 0
-#endif
-
-// MSVC compiler
-#if defined(_MSC_VER)
-#    define XRLUA_MSVC() 1
-#    define XRLUA_MSVC_MAJOR() (_MSC_FULL_VER / 10000000)
-#    define XRLUA_MSVC_MINOR() (_MSC_FULL_VER % 10000000 / 100000)
-#    define XRLUA_MSVC_PATCH() (_MSC_FULL_VER % 100000)
-#else
-#    define XRLUA_MSVC() 0
-#    define XRLUA_MSVC_MAJOR() 0
-#    define XRLUA_MSVC_MINOR() 0
-#    define XRLUA_MSVC_PATCH() 0
 #endif
 
 // XRLUA_COMPILER_NAME
