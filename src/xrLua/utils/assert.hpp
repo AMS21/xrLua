@@ -12,7 +12,7 @@ void assertion_failure_handler(
 #define XRLUA_ASSERT(condition, message)                                                                               \
     if (!(condition))                                                                                                  \
     {                                                                                                                  \
-        assert_failure_handler(message, condition, __FILE__, __LINE__, __PRETTY_FUNCTION__, msg);                      \
+        ::xrlua::detail::assertion_failure_handler(message, #condition, __FILE__, __LINE__, __PRETTY_FUNCTION__);      \
     }                                                                                                                  \
     (void)0
 
