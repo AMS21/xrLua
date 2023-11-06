@@ -67,6 +67,8 @@ jobs:
         uses: codecov/codecov-action@v3.1.4
         with:
           file: ./build/coverage.xml
+          flags: ${{ runner.os }},gcc-${{ matrix.cfg.compiler_version }},${{ matrix.build_type }}
+          name: ${{ runner.os }}-gcc-${{ matrix.cfg.compiler_version }}-${{ matrix.build_type }}
           fail_ci_if_error: true
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
