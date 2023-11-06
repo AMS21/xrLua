@@ -1,4 +1,4 @@
-#include "xrLua/utils/assert.hpp"
+#include "xrLua/prelude.hpp"
 
 #include <cstdio>
 #include <cstdlib>

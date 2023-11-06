@@ -1,9 +1,9 @@
 #include "gtest/gtest.h"
 #include <gtest/gtest.h>
 
-#include <xrLua/utils/assert.hpp>
+#include <xrLua/prelude.hpp>
 
-TEST(utils, assert)
+TEST(prelude, assert)
 {
     XRLUA_ASSERT(true, "Should not fail!");
     XRLUA_PEDANTIC_ASSERT(true, "Should not fail");

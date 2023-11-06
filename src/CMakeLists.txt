@@ -1,13 +1,7 @@
 project(xrLua)
 
-file(
-  GLOB
-  XRLUA_SOURCE_FILES
-  "xrLua/lexer/lexer.hpp"
-  "xrLua/utils/assert.hpp"
-  "xrLua/utils/assert.cpp"
-  "xrLua/utils/is_space.hpp"
-  "xrLua/prelude.hpp")
+file(GLOB XRLUA_SOURCE_FILES "xrLua/lexer/lexer.hpp" "xrLua/utils/is_space.hpp"
+     "xrLua/prelude.cpp" "xrLua/prelude.hpp")
 
 add_library(${PROJECT_NAME}Lib STATIC ${XRLUA_SOURCE_FILES})
 target_include_directories(${PROJECT_NAME}Lib

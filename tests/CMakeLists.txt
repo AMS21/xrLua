@@ -1,6 +1,6 @@
 project(xrLuaTests)
 
-file(GLOB XRLUA_TESTS_SOURCES "utils/assert_test.cpp" "utils/is_space_test.cpp")
+file(GLOB XRLUA_TESTS_SOURCES "prelude_test.cpp" "utils/is_space_test.cpp")
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
   # gtests TEST macro triggers this warning
