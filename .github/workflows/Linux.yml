@@ -93,6 +93,7 @@ jobs:
 
       - name: Install compiler
         run: |
+          sudo apt-get update
           sudo apt-get install gcc-${{ matrix.cfg.compiler_version }} g++-${{ matrix.cfg.compiler_version }}
 
           echo "CC=gcc-${{ matrix.cfg.compiler_version }}" >> "$GITHUB_ENV"

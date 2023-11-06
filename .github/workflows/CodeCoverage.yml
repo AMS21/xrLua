@@ -11,7 +11,7 @@ on:
 
 jobs:
   linux:
-    runs-on: 'ubuntu-22.04'
+    runs-on: '${{ matrix.cfg.os }}'
 
     strategy:
       fail-fast: false
