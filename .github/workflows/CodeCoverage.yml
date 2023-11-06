@@ -46,7 +46,7 @@ jobs:
           echo "CXX=g++-${{ matrix.cfg.compiler_version }}" >> "$GITHUB_ENV"
 
       - name: Install gcovr
-        run: sudo apt-get install gcovr
+        run: pip install gcovr
 
       - name: Configure build directory
         run: cmake -B ./build -S ./ -DCMAKE_BUILD_TYPE:STRING=${{ matrix.build_type }} -DXRLUA_COVERAGE_BUILD=ON
