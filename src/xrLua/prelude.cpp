@@ -12,7 +12,7 @@ void assertion_failure_handler(
 {
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg)
     (void)std::fprintf(stderr,
-        "ASSERTION VIOLATION\n"
+        "XRLUA ASSERTION VIOLATION\n"
         "message:   %s\n"
         "condition: %s\n"
         "file:      %s (%d)\n"
