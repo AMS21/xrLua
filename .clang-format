@@ -9,7 +9,7 @@ AlignOperands: DontAlign
 AlignTrailingComments: true
 AllowAllParametersOfDeclarationOnNextLine: true
 AllowShortBlocksOnASingleLine: Never
-AllowShortCaseLabelsOnASingleLine: true
+AllowShortCaseLabelsOnASingleLine: false
 AllowShortEnumsOnASingleLine: false
 AllowShortFunctionsOnASingleLine: All
 AllowShortIfStatementsOnASingleLine: Never
@@ -44,7 +44,7 @@ BreakBeforeTernaryOperators: false
 BreakConstructorInitializers: BeforeComma
 ColumnLimit: 120
 CommentPragmas: '^ (IWYU pragma:|NOLINT)'
-CompactNamespaces: false
+CompactNamespaces: true
 ConstructorInitializerAllOnOneLineOrOnePerLine: false
 ConstructorInitializerIndentWidth: 4
 ContinuationIndentWidth: 4
