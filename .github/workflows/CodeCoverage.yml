@@ -16,8 +16,20 @@ jobs:
     strategy:
       fail-fast: false
 
-    env:
-      compiler_version: "13"
+      matrix:
+        # Pair of os version and gcc version
+        cfg:
+          - { os: ubuntu-20.04, compiler_version: "7" }
+          - { os: ubuntu-20.04, compiler_version: "8" }
+          - { os: ubuntu-20.04, compiler_version: "9" }
+          - { os: ubuntu-20.04, compiler_version: "10" }
+          - { os: ubuntu-20.04, compiler_version: "11" }
+          - { os: ubuntu-22.04, compiler_version: "12" }
+          - { os: ubuntu-22.04, compiler_version: "13" }
+
+        build_type:
+          - "Debug"
+          - "Release"
 
     steps:
       - name: Checkout
@@ -26,22 +38,30 @@ jobs:
           submodules: recursive
 
       - name: Install compiler
-        run: sudo apt-get install gcc-${{ env.compiler_version }} g++-${{ env.compiler_version }} gcovr
+        run: |
+          sudo apt-get update
+          sudo apt-get install gcc-${{ matrix.cfg.compiler_version }} g++-${{ matrix.cfg.compiler_version }}
+
+          echo "CC=gcc-${{ matrix.cfg.compiler_version }}" >> "$GITHUB_ENV"
+          echo "CXX=g++++-${{ matrix.cfg.compiler_version }}" >> "$GITHUB_ENV"
+
+      - name: Install gcovr
+        run: sudo apt-get install gcovr
 
       - name: Configure build directory
-        run: cmake -B ./build -S ./ -DCMAKE_BUILD_TYPE:STRING=Debug
+        run: cmake -B ./build -S ./ -DCMAKE_BUILD_TYPE:STRING=${{ matrix.build_type }} -DXRLUA_COVERAGE_BUILD=ON
 
       - name: Build
         working-directory: ./build
-        run: cmake --build . --config Debug
+        run: cmake --build . --config ${{ matrix.build_type }}
 
       - name: Run tests
         working-directory: ./build
-        run: ctest . -C Debug
+        run: ctest . -C ${{ matrix.build_type }}
 
       - name: Process coverage data
         working-directory: ./build
-        run: gcovr -j $(nproc) --delete --root ../ --print-summary --exclude-unreachable-branches --exclude-function-lines --xml-pretty --xml coverage.xml . --gcov-executable "gcov-${{ env.compiler_version }}" --exclude-lines-by-pattern "^\s*{$" --exclude-lines-by-pattern "^\s*}$"
+        run: gcovr -j $(nproc) --delete --root ../ --print-summary --exclude-unreachable-branches --exclude-function-lines --xml-pretty --xml coverage.xml . --gcov-executable "gcov-${{ matrix.cfg.compiler_version }}" --exclude-lines-by-pattern "^\s*{$" --exclude-lines-by-pattern "^\s*}$"
 
       - name: Upload coverage data
         uses: codecov/codecov-action@v3.1.4

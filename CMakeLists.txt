@@ -22,6 +22,7 @@ if(NOT DEFINED XRLUA_MAIN_PROJECT)
 endif()
 
 # Options
+option(XRLUA_COVERAGE_BUILD "Enable coverage flags" OFF)
 
 # Settings
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -140,6 +141,14 @@ if(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
       -fstrict-enums
       -ftree-loop-im
       -ftree-loop-ivcanon)
+  set(XRLUA_COVERAGE_FLAGS
+      --coverage
+      -fno-common
+      -fno-inline
+      -fno-inline-functions
+      -fno-omit-frame-pointer
+      -fprofile-arcs
+      -ftest-coverage)
   if(XRLUA_LTO_SUPPORTED)
     set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
     set(XRLUA_OPT_FLAGS -fdevirtualize-at-ltrans -fipa-pta -fwhole-program)
@@ -149,6 +158,7 @@ if(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
   if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 8)
     set(XRLUA_FLAGS ${XRLUA_FLAGS} -Wsuggest-attribute=cold
                     -Wsuggest-attribute=malloc -Wcatch-value=3 -Wextra-semi)
+    set(XRLUA_COVERAGE_FLAGS ${XRLUA_COVERAGE_FLAGS} -fprofile-abs-path)
   endif()
 
   # GCC-9 flags
@@ -240,6 +250,15 @@ elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
       -fstrict-return
       -fstrict-vtable-pointers)
   set(XRLUA_DEBUG_FLAGS -ftrivial-auto-var-init=pattern -grecord-command-line)
+  set(XRLUA_COVERAGE_FLAGS
+      -fcoverage-mapping
+      -fno-common
+      -fno-inline
+      -fno-inline-functions
+      -fno-omit-frame-pointer
+      -fprofile-arcs
+      -fprofile-instr-generate
+      -ftest-coverage)
   if(XRLUA_LTO_SUPPORTED)
     set(XRLUA_OPT_FLAGS -flto=full -fwhole-program-vtables
                         -fvirtual-function-elimination)
@@ -276,10 +295,15 @@ endif()
 string(REPLACE ";" " " XRLUA_FLAGS "${XRLUA_FLAGS}")
 string(REPLACE ";" " " XRLUA_DEBUG_FLAGS "${XRLUA_DEBUG_FLAGS}")
 string(REPLACE ";" " " XRLUA_OPT_FLAGS "${XRLUA_OPT_FLAGS}")
+string(REPLACE ";" " " XRLUA_COVERAGE_FLAGS "${XRLUA_COVERAGE_FLAGS}")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${XRLUA_FLAGS}")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${XRLUA_DEBUG_FLAGS}")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${XRLUA_OPT_FLAGS}")
+
+if (XRLUA_COVERAGE_BUILD)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${XRLUA_COVERAGE_FLAGS}")
+endif()
 
 # subdirectories
 add_subdirectory(src)

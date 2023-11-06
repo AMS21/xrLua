@@ -92,10 +92,14 @@ jobs:
           submodules: recursive
 
       - name: Install compiler
-        run: sudo apt-get install gcc-${{ matrix.cfg.compiler_version }} g++-${{ matrix.cfg.compiler_version }}
+        run: |
+          sudo apt-get install gcc-${{ matrix.cfg.compiler_version }} g++-${{ matrix.cfg.compiler_version }}
+
+          echo "CC=gcc-${{ matrix.cfg.compiler_version }}" >> "$GITHUB_ENV"
+          echo "CXX=g++++-${{ matrix.cfg.compiler_version }}" >> "$GITHUB_ENV"
 
       - name: Configure build directory
-        run: CC=gcc-${{ matrix.cfg.compiler_version }} CXX=g++-${{ matrix.cfg.compiler_version }} cmake -B ./build -S ./ -DCMAKE_BUILD_TYPE:STRING=${{ matrix.build_type }}
+        run: cmake -B ./build -S ./ -DCMAKE_BUILD_TYPE:STRING=${{ matrix.build_type }}
 
       - name: Build
         working-directory: ./build
